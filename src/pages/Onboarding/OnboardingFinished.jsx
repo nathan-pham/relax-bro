@@ -14,9 +14,10 @@ const OnboardingFinished = () => {
 
     useEffect(() => {
         (async () => {
-            await electronFetch("/setOnboarding", {
+            await electronFetch("set", {
                 alarmMethod,
                 faceDistance,
+                errorThreshold: 10,
             });
 
             setSavedSettings(true);

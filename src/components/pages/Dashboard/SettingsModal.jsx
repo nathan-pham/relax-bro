@@ -6,14 +6,19 @@ import { Button, P } from "@/components/atoms";
 
 import AlarmMethods from "@/components/pages/Onboarding/AlarmMethods";
 import IconOption from "@/components/pages/Dashboard/IconOption";
-
 import RangeInput from "./RangeInput";
+
+import electronFetch from "@/utils/electronFetch";
+import useStore from "@/hooks/useStore";
 
 const SettingsModal = ({
     closeModal,
     renderingEnabled,
     setRenderingEnabled,
 }) => {
+    const { faceDistance, setFaceDistance, errorThreshold, setErrorThreshold } =
+        useStore();
+
     return (
         <motion.div
             initial={{ opacity: 0 }}
@@ -39,27 +44,38 @@ const SettingsModal = ({
                     that here.
                 </P>
 
-                <AlarmMethods compact />
+                <AlarmMethods
+                    compact
+                    onChange={(i) => {
+                        electronFetch("setAlarmMethod", { alarmMethod: i });
+                    }}
+                />
 
                 <div className="mt-6">
                     <RangeInput
-                        label="Face Distance"
+                        label={`Face Distance (${faceDistance})`}
                         name="faceDistance"
                         min="20"
                         max="200"
+                        value={faceDistance}
+                        onChange={(e) => {
+                            setFaceDistance(parseInt(e.target.value));
+                        }}
                     />
 
                     <RangeInput
-                        label="Error Threshold"
+                        label={`Error Threshold (${errorThreshold})`}
                         name="error"
                         min="0"
                         max="20"
+                        value={errorThreshold}
+                        onChange={(e) => {
+                            setErrorThreshold(parseInt(e.target.value));
+                        }}
                     />
                 </div>
 
-                {/* <Input type="range" /> */}
-
-                <Link to="/onboarding">
+                <Link to="/onboarding" className="w-fit block">
                     <Button $warning className="mt-6">
                         Redo Onboarding
                     </Button>
@@ -72,7 +88,19 @@ const SettingsModal = ({
                         ? "Disable Rendering"
                         : "Enable Rendering"}
                 </Button>
-                <Button className="mt-3">Save</Button>
+                <Button
+                    className="mt-3"
+                    onClick={() => {
+                        electronFetch("set", {
+                            faceDistance,
+                            errorThreshold,
+                        });
+
+                        closeModal();
+                    }}
+                >
+                    Save
+                </Button>
             </motion.aside>
         </motion.div>
     );

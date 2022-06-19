@@ -6,17 +6,19 @@ import useStore from "@/hooks/useStore";
 
 const Redirect = () => {
     const navigate = useNavigate();
-    const { setAlarmMethod, setFaceDistance } = useStore();
+    const { setMultipleIntKeys } = useStore();
 
     useEffect(() => {
         (async () => {
-            const { alarmMethod, faceDistance } = await electronFetch(
-                "/getOnboarding"
-            );
+            const { alarmMethod, faceDistance, errorThreshold } =
+                await electronFetch("get");
 
-            if (alarmMethod && faceDistance) {
-                setAlarmMethod(alarmMethod);
-                setFaceDistance(faceDistance);
+            if (alarmMethod && faceDistance && errorThreshold) {
+                setMultipleIntKeys({
+                    alarmMethod,
+                    faceDistance,
+                    errorThreshold,
+                });
 
                 navigate("/dashboard");
             } else {

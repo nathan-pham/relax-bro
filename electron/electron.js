@@ -60,18 +60,14 @@ ipcMain.on("toElectron", (_, args) => {
     const json = (data) =>
         mainWindow.webContents.send("fromElectron", JSON.stringify(data));
 
-    if (pathname === "/setOnboarding") {
-        db.set("alarmMethod", body.alarmMethod)
-            .set("faceDistance", body.faceDistance)
-            .commit();
+    if (pathname === "set") {
+        Object.keys(body).forEach((key) => db.set(key, body[key]));
+        db.commit();
 
         json({ body });
-    } else if (pathname === "/getOnboarding") {
-        console.log("ok", db.data);
-        json({
-            alarmMethod: db.get("alarmMethod"),
-            faceDistance: db.get("faceDistance"),
-        });
+    } else if (pathname === "get") {
+        console.log(db.data);
+        json(db.data);
     }
 
     // mainWindow.webContents.send(

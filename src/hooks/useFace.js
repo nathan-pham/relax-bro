@@ -51,39 +51,37 @@ const useFace = (videoRef, canvasRef, fullspeed = true) => {
             video.srcObject = stream;
             video.play();
 
-            setTimeout(() => {
-                intervalId = setInterval(
-                    async () => {
-                        const detections = await faceapi
-                            .detectAllFaces(
-                                video,
-                                new faceapi.TinyFaceDetectorOptions()
+            intervalId = setInterval(
+                async () => {
+                    const detections = await faceapi
+                        .detectAllFaces(
+                            video,
+                            new faceapi.TinyFaceDetectorOptions()
+                        )
+                        .withFaceLandmarks();
+
+                    ctx.clearRect(0, 0, size.width, size.height);
+                    if (detections.length && fullspeed) {
+                        faceapi.draw.drawDetections(canvas, detections);
+                        faceapi.draw.drawFaceLandmarks(canvas, detections);
+                    }
+
+                    const face = detections[0];
+
+                    if (face) {
+                        const leftSide = face.landmarks.positions[1];
+                        const rightSide = face.landmarks.positions[17];
+
+                        faceDistance.current = Math.floor(
+                            Math.sqrt(
+                                Math.pow(leftSide._x - rightSide._x, 2) +
+                                    Math.pow(leftSide._y - rightSide._y, 2)
                             )
-                            .withFaceLandmarks();
-
-                        ctx.clearRect(0, 0, size.width, size.height);
-                        if (fullspeed && detections.length) {
-                            faceapi.draw.drawDetections(canvas, detections);
-                            faceapi.draw.drawFaceLandmarks(canvas, detections);
-                        }
-
-                        const face = detections[0];
-
-                        if (face) {
-                            const leftSide = face.landmarks.positions[1];
-                            const rightSide = face.landmarks.positions[17];
-
-                            faceDistance.current = Math.floor(
-                                Math.sqrt(
-                                    Math.pow(leftSide._x - rightSide._x, 2) +
-                                        Math.pow(leftSide._y - rightSide._y, 2)
-                                )
-                            );
-                        }
-                    },
-                    fullspeed ? 1000 / 60 : 1000
-                );
-            }, 750);
+                        );
+                    }
+                },
+                fullspeed ? 1000 / 60 : 1000
+            );
 
             setVideoLoaded(true);
         })();

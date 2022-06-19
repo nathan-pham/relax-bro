@@ -15,7 +15,7 @@ const alarmMethods = [
     },
 ];
 
-const AlarmMethods = ({ compact = false }) => {
+const AlarmMethods = ({ compact = false, onChange = () => {} }) => {
     const { alarmMethod, setAlarmMethod } = useStore();
 
     return (
@@ -32,6 +32,7 @@ const AlarmMethods = ({ compact = false }) => {
                     key={id}
                     onClick={() => {
                         setAlarmMethod(id);
+                        onChange(id);
                     }}
                 />
             ))}

@@ -11,7 +11,7 @@ import useFace from "@/hooks/useFace";
 import { AnimatePresence } from "framer-motion";
 
 const Dashboard = () => {
-    const { alarmMethod, faceDistance } = useStore();
+    const { alarmMethod, faceDistance, errorThreshold } = useStore();
     const [modalOpen, setModalOpen] = useState(false);
     const [renderingEnabled, setRenderingEnabled] = useState(true);
 
@@ -29,20 +29,25 @@ const Dashboard = () => {
         let sentNotification = false;
         let intervalId = setInterval(() => {
             if (
-                getFaceDistance() - faceDistance > 10 &&
-                getFaceDistance() > faceDistance &&
+                loaded &&
                 !sentNotification &&
-                loaded
+                getFaceDistance() > faceDistance &&
+                getFaceDistance() - faceDistance > errorThreshold
             ) {
+                sentNotification = true;
+
                 if (alarmMethod === 0) {
                     new Notification("Relax Bro!", {
                         body: "Keep your face away from the screen!",
                     });
                 } else if (alarmMethod === 1) {
-                    audioRef.current?.play();
+                    if (
+                        audioRef.current.duration > 0 &&
+                        audioRef.current.paused
+                    ) {
+                        audioRef.current.play();
+                    }
                 }
-
-                sentNotification = true;
 
                 setTimeout(() => {
                     sentNotification = false;

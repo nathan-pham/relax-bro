@@ -1,1 +1,1 @@
-{"alarmMethod":1,"faceDistance":50}
+{"alarmMethod":1,"faceDistance":"50","errorThreshold":10}
