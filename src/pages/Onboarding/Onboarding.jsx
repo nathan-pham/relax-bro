@@ -1,8 +1,8 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 
-import PrimaryButton from "@/components/button/PrimaryButton";
 import PageTransition from "@/components/animations/PageTransition";
+import { Button } from "@/components/atoms";
 
 const Onboarding = () => {
     return (
@@ -20,7 +20,7 @@ const Onboarding = () => {
 
                     <div className="mt-10">
                         <Link to="/onboarding/video">
-                            <PrimaryButton text="Ok." />
+                            <Button $as="a">Ok.</Button>
                         </Link>
                     </div>
                 </div>

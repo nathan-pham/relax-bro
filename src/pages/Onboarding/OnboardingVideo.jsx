@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 
 import PageTransition from "@/components/animations/PageTransition";
-import PrimaryButton from "@/components/button/PrimaryButton";
+import { Button } from "@/components/atoms";
 
 const OnboardingVideo = () => {
     const videoRef = useRef(null);
@@ -43,7 +43,7 @@ const OnboardingVideo = () => {
                     </div>
                     <div className="mt-4 float-right">
                         <Link to="/onboarding/alarm">
-                            <PrimaryButton text="I look hot." />
+                            <Button $as="a">I look hot.</Button>
                         </Link>
                     </div>
                 </div>

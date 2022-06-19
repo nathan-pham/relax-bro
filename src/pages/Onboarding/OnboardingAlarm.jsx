@@ -1,14 +1,28 @@
 import { Link } from "react-router-dom";
 
 import PageTransition from "@/components/animations/PageTransition";
-import PrimaryButton from "@/components/button/PrimaryButton";
 import AlarmButton from "@/components/pages/Onboarding/AlarmButton";
+import { Button } from "@/components/atoms";
 
 import FilledPin from "@/assets/icons/FilledPin";
 import Notification from "@/assets/icons/Notification";
-import Plus from "@/assets/icons/Plus";
+
+import useStore from "@/hooks/useStore";
+
+const alarmMethods = [
+    {
+        icon: <Notification />,
+        text: "idk notifications are pretty generic",
+    },
+    {
+        icon: <FilledPin />,
+        text: "alarms are effective but annoying af",
+    },
+];
 
 const OnboardingAlarm = () => {
+    const { alarmMethod, setAlarmMethod } = useStore();
+
     return (
         <PageTransition>
             <div className="grid place-items-center h-screen">
@@ -17,23 +31,22 @@ const OnboardingAlarm = () => {
                         How would you like to be notified?
                     </h1>
 
-                    <div className="grid grid-cols-3 mt-10 gap-6">
-                        <AlarmButton
-                            icon={<Notification />}
-                            text="idk pretty generic"
-                        />
-
-                        <AlarmButton
-                            icon={<FilledPin />}
-                            text="effective but annoying af"
-                        />
-
-                        <AlarmButton icon={<Plus />} text="upload your own" />
+                    <div className="grid grid-cols-2 mt-10 gap-6">
+                        {alarmMethods.map((props, id) => (
+                            <AlarmButton
+                                {...props}
+                                active={alarmMethod === id}
+                                key={id}
+                                onClick={() => {
+                                    setAlarmMethod(id);
+                                }}
+                            />
+                        ))}
                     </div>
 
                     <div className="mt-6 float-right">
                         <Link to="/onboarding/finished">
-                            <PrimaryButton text="Sounds good." />
+                            <Button $as="a">Sounds good.</Button>
                         </Link>
                     </div>
                 </div>
