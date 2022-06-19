@@ -8,7 +8,7 @@ class Database {
 
     readData() {
         try {
-            const json = JSON.parse(fs.readFileSync(filename, "utf8"));
+            const json = JSON.parse(fs.readFileSync(this.filename, "utf8"));
             this.data = json;
         } catch (e) {
             this.data = {};

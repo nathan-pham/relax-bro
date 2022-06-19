@@ -67,6 +67,7 @@ ipcMain.on("toElectron", (_, args) => {
 
         json({ body });
     } else if (pathname === "/getOnboarding") {
+        console.log("ok", db.data);
         json({
             alarmMethod: db.get("alarmMethod"),
             faceDistance: db.get("faceDistance"),

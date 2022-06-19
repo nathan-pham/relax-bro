@@ -14,3 +14,14 @@ export const Button = tw.button`
     hover:bg-blue-700
     transition-colors
 `;
+
+export const CanvasWrapper = tw.div`
+    w-[640px] 
+    h-[480px] 
+    
+    bg-gray-100 
+    rounded-lg
+    
+    overflow-hidden
+    relative
+`

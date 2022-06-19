@@ -11,7 +11,7 @@ const AlarmButton = ({ icon, text, active, ...props }) => {
                     : "hover:-translate-y-1"
             )}
         >
-            <div className="text-blue-600 w-8 mx-auto">{icon}</div>
+            <div className="text-blue-600 w-fit mx-auto">{icon}</div>
             <span className="text-gray-700 mt-4 block">{text}</span>
         </div>
     );

@@ -4,18 +4,16 @@ import PageTransition from "@/components/animations/PageTransition";
 import AlarmButton from "@/components/pages/Onboarding/AlarmButton";
 import { Button } from "@/components/atoms";
 
-import FilledPin from "@/assets/icons/FilledPin";
-import Notification from "@/assets/icons/Notification";
-
+import { IoAlarmOutline, IoNotificationsOutline } from "react-icons/io5";
 import useStore from "@/hooks/useStore";
 
 const alarmMethods = [
     {
-        icon: <Notification />,
+        icon: <IoNotificationsOutline size="2rem" />,
         text: "idk notifications are pretty generic",
     },
     {
-        icon: <FilledPin />,
+        icon: <IoAlarmOutline size="2rem" />,
         text: "alarms are effective but annoying af",
     },
 ];

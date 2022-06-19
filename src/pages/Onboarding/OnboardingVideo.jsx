@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 
 import PageTransition from "@/components/animations/PageTransition";
-import { Button } from "@/components/atoms";
+import { Button, CanvasWrapper } from "@/components/atoms";
 
 import useFace from "@/hooks/useFace";
 import useStore from "@/hooks/useStore";
@@ -19,7 +19,7 @@ const OnboardingVideo = () => {
         <PageTransition>
             <div className="grid place-items-center h-screen">
                 <div className="max-w-3xl">
-                    <div className="w-[640px] h-[480px] bg-gray-100 rounded-lg overflow-hidden relative">
+                    <CanvasWrapper>
                         <motion.div
                             animate={{
                                 opacity: loaded ? 1 : 0,
@@ -34,7 +34,7 @@ const OnboardingVideo = () => {
                                 className="absolute w-full h-full left-0 top-0 z-10"
                             ></canvas>
                         </motion.div>
-                    </div>
+                    </CanvasWrapper>
                     <div className="mt-4 float-right">
                         {loaded && (
                             <Link to="/onboarding/alarm">
