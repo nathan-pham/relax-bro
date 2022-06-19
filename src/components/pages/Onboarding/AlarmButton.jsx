@@ -12,7 +12,7 @@ const AlarmButton = ({ icon, text, active, ...props }) => {
             )}
         >
             <div className="text-blue-600 w-fit mx-auto">{icon}</div>
-            <span className="text-gray-700 mt-4 block">{text}</span>
+            <span className="text-gray-500 mt-4 block">{text}</span>
         </div>
     );
 };

@@ -1,26 +1,10 @@
 import { Link } from "react-router-dom";
 
 import PageTransition from "@/components/animations/PageTransition";
-import AlarmButton from "@/components/pages/Onboarding/AlarmButton";
+import AlarmMethods from "@/components/pages/Onboarding/AlarmMethods";
 import { Button } from "@/components/atoms";
 
-import { IoAlarmOutline, IoNotificationsOutline } from "react-icons/io5";
-import useStore from "@/hooks/useStore";
-
-const alarmMethods = [
-    {
-        icon: <IoNotificationsOutline size="2rem" />,
-        text: "idk notifications are pretty generic",
-    },
-    {
-        icon: <IoAlarmOutline size="2rem" />,
-        text: "alarms are effective but annoying af",
-    },
-];
-
 const OnboardingAlarm = () => {
-    const { alarmMethod, setAlarmMethod } = useStore();
-
     return (
         <PageTransition>
             <div className="grid place-items-center h-screen">
@@ -29,18 +13,7 @@ const OnboardingAlarm = () => {
                         How would you like to be notified?
                     </h1>
 
-                    <div className="grid grid-cols-2 mt-10 gap-6">
-                        {alarmMethods.map((props, id) => (
-                            <AlarmButton
-                                {...props}
-                                active={alarmMethod === id}
-                                key={id}
-                                onClick={() => {
-                                    setAlarmMethod(id);
-                                }}
-                            />
-                        ))}
-                    </div>
+                    <AlarmMethods />
 
                     <div className="mt-6 float-right">
                         <Link to="/onboarding/finished">
