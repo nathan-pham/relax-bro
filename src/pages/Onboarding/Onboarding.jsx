@@ -15,7 +15,7 @@ const Onboarding = () => {
                     <p className="mt-5 text-lg text-gray-700">
                         How do you think you should sit? Ideally, your face
                         should be 20 - 40 inches away from the monitor. We'll
-                        let you whenever you deviate from this position.
+                        let you know whenever you deviate from this position.
                     </p>
 
                     <div className="mt-10 inline-flex">

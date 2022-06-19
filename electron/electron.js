@@ -66,14 +66,6 @@ ipcMain.on("toElectron", (_, args) => {
 
         json({ body });
     } else if (pathname === "get") {
-        console.log(db.data);
         json(db.data);
     }
-
-    // mainWindow.webContents.send(
-    //     "fromElectron",
-    //     JSON.stringify({
-    //         test: "ok",
-    //     })
-    // );
 });

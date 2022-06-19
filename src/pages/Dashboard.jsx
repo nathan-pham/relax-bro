@@ -58,7 +58,7 @@ const Dashboard = () => {
         return () => {
             clearInterval(intervalId);
         };
-    }, []);
+    }, [loaded]);
 
     return (
         <main className="max-w-3xl mx-auto mt-20">
