@@ -1,11 +1,11 @@
 import * as faceapi from "face-api.js";
 import { useEffect, useState, useRef } from "react";
 
-const useFace = (videoRef, canvasRef) => {
+const useFace = (videoRef, canvasRef, fullspeed = true) => {
     const [apiLoaded, setApiLoaded] = useState(false);
     const [videoLoaded, setVideoLoaded] = useState(false);
 
-    const faceDistance = useRef(60);
+    const faceDistance = useRef(50);
 
     // load face api
     useEffect(() => {
@@ -14,7 +14,6 @@ const useFace = (videoRef, canvasRef) => {
                 faceapi.nets.tinyFaceDetector.loadFromUri("/models"),
                 faceapi.nets.faceLandmark68Net.loadFromUri("/models"),
                 faceapi.nets.faceRecognitionNet.loadFromUri("/models"),
-                faceapi.nets.faceExpressionNet.loadFromUri("/models"),
             ]);
 
             setApiLoaded(true);
@@ -53,37 +52,37 @@ const useFace = (videoRef, canvasRef) => {
             video.play();
 
             setTimeout(() => {
-                intervalId = setInterval(async () => {
-                    const detections = await faceapi
-                        .detectAllFaces(
-                            video,
-                            new faceapi.TinyFaceDetectorOptions()
-                        )
-                        .withFaceLandmarks();
-
-                    const resizedDetections = faceapi.resizeResults(
-                        detections,
-                        size
-                    );
-
-                    ctx.clearRect(0, 0, size.width, size.height);
-                    faceapi.draw.drawDetections(canvas, resizedDetections);
-                    faceapi.draw.drawFaceLandmarks(canvas, resizedDetections);
-
-                    const face = detections[0];
-
-                    if (face) {
-                        const leftSide = face.landmarks.positions[1];
-                        const rightSide = face.landmarks.positions[17];
-
-                        faceDistance.current = Math.floor(
-                            Math.sqrt(
-                                Math.pow(leftSide._x - rightSide._x, 2) +
-                                    Math.pow(leftSide._y - rightSide._y, 2)
+                intervalId = setInterval(
+                    async () => {
+                        const detections = await faceapi
+                            .detectAllFaces(
+                                video,
+                                new faceapi.TinyFaceDetectorOptions()
                             )
-                        );
-                    }
-                }, 1000 / 60);
+                            .withFaceLandmarks();
+
+                        ctx.clearRect(0, 0, size.width, size.height);
+                        if (fullspeed && detections.length) {
+                            faceapi.draw.drawDetections(canvas, detections);
+                            faceapi.draw.drawFaceLandmarks(canvas, detections);
+                        }
+
+                        const face = detections[0];
+
+                        if (face) {
+                            const leftSide = face.landmarks.positions[1];
+                            const rightSide = face.landmarks.positions[17];
+
+                            faceDistance.current = Math.floor(
+                                Math.sqrt(
+                                    Math.pow(leftSide._x - rightSide._x, 2) +
+                                        Math.pow(leftSide._y - rightSide._y, 2)
+                                )
+                            );
+                        }
+                    },
+                    fullspeed ? 1000 / 60 : 1000
+                );
             }, 750);
 
             setVideoLoaded(true);
@@ -96,9 +95,8 @@ const useFace = (videoRef, canvasRef) => {
 
             // stop detections
             clearInterval(intervalId);
-            console.log("cancled");
         };
-    }, [apiLoaded]);
+    }, [apiLoaded, fullspeed]);
 
     return {
         loaded: apiLoaded && videoLoaded,

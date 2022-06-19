@@ -9,32 +9,17 @@ import IconOption from "@/components/pages/Dashboard/IconOption";
 
 import RangeInput from "./RangeInput";
 
-// const pageVariants = {
-//     initial: {
-//         opacity: 0,
-//         y: 100,
-//     },
-//     in: {
-//         opacity: 1,
-//         y: 0,
-//     },
-//     out: {
-//         opacity: 0,
-//         y: 100,
-//     },
-// };
-
-//                 initial="initial"
-//                 animate="in"
-//                 exit="out"
-
-const SettingsModal = ({ closeModal }) => {
+const SettingsModal = ({
+    closeModal,
+    renderingEnabled,
+    setRenderingEnabled,
+}) => {
     return (
         <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed top-0 left-0 h-screen w-screen bg-black bg-opacity-40 grid place-items-center"
+            className="fixed z-50 top-0 left-0 h-screen w-screen bg-black bg-opacity-40 grid place-items-center"
         >
             <motion.aside
                 initial={{ opacity: 0, y: 100 }}
@@ -79,7 +64,14 @@ const SettingsModal = ({ closeModal }) => {
                         Redo Onboarding
                     </Button>
                 </Link>
-                <Button className="mt-3">Pause Rendering</Button>
+                <Button
+                    className="mt-3"
+                    onClick={() => setRenderingEnabled((enabled) => !enabled)}
+                >
+                    {renderingEnabled
+                        ? "Disable Rendering"
+                        : "Enable Rendering"}
+                </Button>
                 <Button className="mt-3">Save</Button>
             </motion.aside>
         </motion.div>

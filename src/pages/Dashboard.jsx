@@ -1,25 +1,59 @@
-import { IoCogOutline, IoCloseOutline } from "react-icons/io5";
-import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { IoCogOutline } from "react-icons/io5";
+import { useState, useRef, useEffect } from "react";
 
-import { Button, Footer, CanvasWrapper, Input, P } from "@/components/atoms";
+import { Footer, CanvasWrapper, P } from "@/components/atoms";
 
 import SettingsModal from "@/components/pages/Dashboard/SettingsModal";
 import IconOption from "@/components/pages/Dashboard/IconOption";
 import useStore from "@/hooks/useStore";
+import useFace from "@/hooks/useFace";
 
 import { AnimatePresence } from "framer-motion";
 
 const Dashboard = () => {
     const { alarmMethod, faceDistance } = useStore();
     const [modalOpen, setModalOpen] = useState(false);
-    const navigate = useNavigate();
+    const [renderingEnabled, setRenderingEnabled] = useState(true);
 
-    // useEffect(() => {
-    //     new Notification("Welcome", {
-    //         body: "welcome to this dashboard",
-    //     });
-    // }, []);
+    const videoRef = useRef(null);
+    const canvasRef = useRef(null);
+    const audioRef = useRef(null);
+
+    const { loaded, getFaceDistance } = useFace(
+        videoRef,
+        canvasRef,
+        renderingEnabled
+    );
+
+    useEffect(() => {
+        let sentNotification = false;
+        let intervalId = setInterval(() => {
+            if (
+                getFaceDistance() - faceDistance > 10 &&
+                getFaceDistance() > faceDistance &&
+                !sentNotification &&
+                loaded
+            ) {
+                if (alarmMethod === 0) {
+                    new Notification("Relax Bro!", {
+                        body: "Keep your face away from the screen!",
+                    });
+                } else if (alarmMethod === 1) {
+                    audioRef.current?.play();
+                }
+
+                sentNotification = true;
+
+                setTimeout(() => {
+                    sentNotification = false;
+                }, 5000);
+            }
+        }, 1000 / 60);
+
+        return () => {
+            clearInterval(intervalId);
+        };
+    }, []);
 
     return (
         <main className="max-w-3xl mx-auto mt-20">
@@ -31,7 +65,18 @@ const Dashboard = () => {
                 rendering in the settings down below.
             </P>
 
-            <CanvasWrapper className="mt-6"></CanvasWrapper>
+            <audio src="/horn.mp3" className="hidden" ref={audioRef}></audio>
+
+            <CanvasWrapper className="mt-6">
+                <video
+                    ref={videoRef}
+                    className="w-full h-full object-cover"
+                ></video>
+                <canvas
+                    ref={canvasRef}
+                    className="absolute w-full h-full left-0 top-0 z-10"
+                ></canvas>
+            </CanvasWrapper>
 
             <div className="flex mt-4 gap-4">
                 <IconOption
@@ -41,7 +86,11 @@ const Dashboard = () => {
 
                 <AnimatePresence>
                     {modalOpen && (
-                        <SettingsModal closeModal={() => setModalOpen(false)} />
+                        <SettingsModal
+                            closeModal={() => setModalOpen(false)}
+                            renderingEnabled={renderingEnabled}
+                            setRenderingEnabled={setRenderingEnabled}
+                        />
                     )}
                 </AnimatePresence>
             </div>
