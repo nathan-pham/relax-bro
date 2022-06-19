@@ -1,16 +1,22 @@
+const { app, ipcMain, BrowserWindow } = require("electron");
 const path = require("path");
-const { app, BrowserWindow } = require("electron");
+
+const Database = require("./Database");
+const db = new Database("database.json");
 
 const isDev = process.env.IS_DEV == "true" ? true : false;
+let mainWindow;
 
 function createWindow() {
     // Create the browser window.
-    const mainWindow = new BrowserWindow({
+    mainWindow = new BrowserWindow({
         width: 800,
         height: 600,
         webPreferences: {
             preload: path.join(__dirname, "preload.js"),
-            nodeIntegration: true,
+            nodeIntegration: false,
+            contextIsolation: true,
+            enableRemoteModule: false,
         },
     });
 
@@ -47,4 +53,30 @@ app.on("window-all-closed", () => {
     if (process.platform !== "darwin") {
         app.quit();
     }
+});
+
+ipcMain.on("toElectron", (_, args) => {
+    const { pathname, body } = JSON.parse(args);
+    const json = (data) =>
+        mainWindow.webContents.send("fromElectron", JSON.stringify(data));
+
+    if (pathname === "/setOnboarding") {
+        db.set("alarmMethod", body.alarmMethod)
+            .set("faceDistance", body.faceDistance)
+            .commit();
+
+        json({ body });
+    } else if (pathname === "/getOnboarding") {
+        json({
+            alarmMethod: db.get("alarmMethod"),
+            faceDistance: db.get("faceDistance"),
+        });
+    }
+
+    // mainWindow.webContents.send(
+    //     "fromElectron",
+    //     JSON.stringify({
+    //         test: "ok",
+    //     })
+    // );
 });

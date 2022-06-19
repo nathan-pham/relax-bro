@@ -1,22 +1,23 @@
 import { AnimatePresence } from "framer-motion";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
+// import pages
 import Onboarding, {
     OnboardingVideo,
     OnboardingAlarm,
     OnboardingFinished,
 } from "@/pages/Onboarding/";
 
-const Demo = () => {
-    return <p>Hello World</p>;
-};
+import Redirect from "@/pages/Redirect";
+import Dashboard from "@/pages/Dashboard";
 
 const App = () => {
     return (
         <AnimatePresence>
             <BrowserRouter>
-                <Routes location={location} key={location.pathname}>
-                    <Route path="/" element={<Demo />} />
+                <Routes>
+                    <Route path="/" element={<Redirect />} />
+                    <Route path="dashboard" element={<Dashboard />} />
                     <Route path="onboarding">
                         <Route index element={<Onboarding />} />
                         <Route path="video" element={<OnboardingVideo />} />

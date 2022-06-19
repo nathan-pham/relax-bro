@@ -1,8 +1,8 @@
-import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 
 import PageTransition from "@/components/animations/PageTransition";
 import { Button } from "@/components/atoms";
+import { useEffect } from "react";
 
 const Onboarding = () => {
     return (
@@ -18,9 +18,9 @@ const Onboarding = () => {
                         let you whenever you deviate from this position.
                     </p>
 
-                    <div className="mt-10">
+                    <div className="mt-10 inline-flex">
                         <Link to="/onboarding/video">
-                            <Button $as="a">Ok.</Button>
+                            <Button>Ok.</Button>
                         </Link>
                     </div>
                 </div>

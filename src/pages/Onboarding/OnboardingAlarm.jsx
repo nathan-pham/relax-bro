@@ -46,7 +46,7 @@ const OnboardingAlarm = () => {
 
                     <div className="mt-6 float-right">
                         <Link to="/onboarding/finished">
-                            <Button $as="a">Sounds good.</Button>
+                            <Button>Sounds good.</Button>
                         </Link>
                     </div>
                 </div>
